@@ -1,0 +1,56 @@
+<?xml version= "1.0"?>
+
+<expectedFails>
+   <namelistTest> 
+      <yellowstone>
+         <INTEL>
+            <compare>
+            </compare>
+            <generate>
+            </generate>
+
+         </INTEL>
+      </yellowstone>
+      <goldbach>
+         <INTEL>
+            <compare>
+            </compare>
+            <generate>
+            </generate>
+         </INTEL>
+      </goldbach>
+   </namelistTest>
+
+   <cesm> 
+      <auxTests>
+         <yellowstone>
+            <INTEL>
+               <entry testId="ERS.f09_g16.ICLM45VIC.yellowstone_intel.clm-vrtlay"        failType="FAIL"  bugz="1722" >floating point exception</entry>
+               <entry testId="ERS_D.f09_g16.ICLM45VIC.yellowstone_intel.clm-vrtlay"      failType="FAIL"  bugz="1722" >floating point exception</entry>
+            </INTEL>
+            <PGI>
+            </PGI>
+         </yellowstone>
+         <goldbach>
+            <INTEL>
+            </INTEL>
+            <NAG>
+            </NAG>
+            <PGI>
+            </PGI>
+         </goldbach>
+      </auxTests>
+   </cesm>
+
+   <PTCLM>
+         <yellowstone>
+            <INTEL>
+            </INTEL>
+         </yellowstone>
+         <goldbach>
+            <PGI>
+            </PGI>
+         </goldbach>
+   </PTCLM>
+
+</expectedFails> 

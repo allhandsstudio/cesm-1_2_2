@@ -1,0 +1,83 @@
+================================================================================
+Tag name: cesm1_2_2_rel04
+Originator: aliceb
+Date: June 11, 2014
+Model: doc
+Version: cesm1_2_2
+One-line: CESM1.2.2 release tag
+================================================================================
+Tag name: cesm1_2_2_rel04
+Originator: aliceb
+Date: June 11, 2014
+Model: doc
+Version: cesm1_2
+One-line: restoring xmldef2html_grid to read <config_compset> for config_grid.xml file
+
+M       modelnl/xmldef2html_grid
+M       modelnl/grid.html
+M       modelnl/index.html
+
+
+================================================================================
+Tag name: doc_140519
+Originator: aliceb
+Date: June 10, 2014
+Model: doc
+Version: cesm1_2
+One-line: Merges and additions from changes that were added to the website without being checked into the repo.
+
+M       ChangeLog
+M       modelnl/machines.html
+A       modelnl/env_mach_pes.html
+M       modelnl/xmldef2html_grid
+A       modelnl/modelnl.html
+M       modelnl/compsets.html
+M       modelnl/nldef2html_cism
+A       modelnl/nl_clm40.html
+M       modelnl/env_run.html
+M       modelnl/env_case.html
+M       modelnl/grid.html
+M       modelnl/nl_cam.html
+M       modelnl/create_tables
+M       modelnl/nl_rtm.html
+A       modelnl/nldef2html_clm40
+M       modelnl/env_pesetup.html
+M       modelnl/xmldef2html_compsets
+A       modelnl/nldef2html_clm45
+M       modelnl/nl_clm.html
+M       modelnl/env_build.html
+M       modelnl/nl_pop2.html
+
+================================================================================
+
+================================================================================
+Tag name: doc_140519
+Originator: aliceb
+Date: May 2 2014
+Model: doc
+Version: cesm1_2
+One-line: Merged from branch to trunk. Updates for BFBFLAG explanation, ocean intialization and author group
+
+M       doc/usersguide/testing.xml
+M       doc/usersguide/usecases.xml
+M       doc/usersguide/bookinfo.xml
+
+================================================================================
+
+Tag name: doc_140228
+Originator(s): sacks
+Date: Feb 28, 2014
+One-line Summary: add new section in CISM namelist documentation
+
+M       modelnl/nldef2html_cism
+
+
+===============================================================
+Tag name: doc_131021
+Originator(s): aliceb
+Date: Mon Oct 21
+One-line Summary: 
+creating doc external starting point of
+https://svn-ccsm-models.cgd.ucar.edu/scripts/branches/docs1_2_scripts4_130418/doc
+
+===============================================================
