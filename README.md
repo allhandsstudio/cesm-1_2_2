@@ -1,4 +1,4 @@
-This is a clone of the [CESM](http://www2.cesm.ucar.edu) version 1.2.2. The original code can be found on the master branch, and the adapted version is on the branch `sunshine`.
+This is a clone of the [CESM](http://www2.cesm.ucar.edu) version 1.2.2. The original code as imported can be found on the `master` branch, and the adapted version is on the (default) branch `sunshine`.
 
 Please see the original copyright and licensing information here: [http://www.cesm.ucar.edu/models/cesm1.2/copyright.html]
 
