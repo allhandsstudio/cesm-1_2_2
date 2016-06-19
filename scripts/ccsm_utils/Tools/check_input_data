@@ -135,21 +135,14 @@ if ($prestageopt) {
 }    
 
 # Subversion repository location.
-my $svn_loc = 'https://svn-ccsm-inputdata.cgd.ucar.edu/trunk/inputdata/';
+my $s3_base = 's3://cesm-input-data/inputdata/';
 
-# If export option is set, test for svn install, and server
+# If export option is set, test for AWS CLI install, and server
 if ($exportopt) {
-  my $error = `svn --version 2> /dev/null`;
+  my $error = `aws --version 2> /dev/null`;
   if ($error eq '') {
-    die "Error: the subversion client svn was not found.\n";
+    die "Error: the AWS cli tool was not found.\n";
   }
-  my $error = `svn list $svn_loc > /dev/null`;
-#  my @error = `svn list $svn_loc 2>&1`;
-#  @found=grep(/atm\//g,@error);
-#  chomp(@found);
-#  if (length($found[0]) == 0){
-#    die ("@error \n");
-#  } 
 }
 
 $inputdata_rootdir .= "/";
@@ -232,10 +225,10 @@ EOF
               }
            }
 	   if (($isinput) && ($exportopt) && (!-e $fileneed)) {
-	      my $fileloc = $svn_loc.$filend;     # Location in subversion repository.
+	      my $fileloc = $s3_base.$filend;     # Location in subversion repository.
   	      my $lsearch = $fileloc;             # Variable used in  searches for symbolic links.
 	      isinrepository($fileloc) ? dataexport($fileneed, $fileloc) : 
-		 print "File was not found in svn repo: $fileloc \n";
+		 print "File was not found in S3 bucket: $fileloc \n";
 	   }
 	   if (($isinput) && ($prestageopt)) {
 	      my $filecopy = $prestage_rootdir.$filend;
@@ -270,17 +263,7 @@ exit( $status );
 
 # Check for existence of a file in the subversion repository, returns 1 if so.
 sub isinrepository($) {
-    return 1 if `svn ls $_[0]`;
-}
-
-# Checks a link in the subversion repository and returns the target location of that link.
-sub linktarget($) {
-    my $filetext = `svn cat $_[0]`;
-    $filetext =~ s/link // or return 0;  # File relative path from link.
-    (my $linktar = $_[0]) =~ s!(.*)/+.*?$!$1/!;
-    $linktar .= $filetext;               # Absolute path target of link.
-    1 while ($linktar =~ s!/+[^/]*?/+\.\./!/!);       # Removes any up-directory (..) commands from target path.
-    return $linktar;
+    return 1 if length(`aws s3 ls $_[0]`);
 }
 
 # Exports a file from the subversion repository, creating any necessary files along the way.
@@ -288,19 +271,7 @@ sub dataexport($$) {
     $_[0] =~ m!(.*)/(.*)!;                             # Stores directory containing file in $1.
     my $dir = $1;
     print "export $_[1] $_[0] ..... " ;
-    my $listing = `svn ls $_[1]`;
-    if ($2 and $listing =~ /^$2\b/) {                  # Check if input is a file or directory (links treated as files).
-	unless (-e $dir) {                             # Make containing directory unless it already exists.
-	    my $dexist = $dir;
-	    while (! -e $dexist) {
-		$dexist =~ s:(.*)/(.+):$1:;
-	    }
-	    system("umask 2; mkdir -p -m 775 $dir");
-	}
-	system("svn export $_[1] $_[0] 1>/dev/null"); # Export file.
-    } else {
-	system("svn export --depth=files $_[1] $_[0] 1>/dev/null"); # Export dir.
-    }
+    system("aws s3 cp $_[1] $_[0] 1>/dev/null");
     if (-f $_[0]) {                                    # Store checksum.
         my $checksumfile = $dir.'/.checksums';         # Checksums saved here.
 	chmod 0555, $_[0];                             # Don't allow writing to file.
