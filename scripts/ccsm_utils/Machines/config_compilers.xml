@@ -386,6 +386,17 @@ for mct, etc.
   <SUPPORTS_CXX>TRUE</SUPPORTS_CXX>
 </compiler>
 
+<compiler MACH="sunshine">
+  <NETCDF_PATH>/usr</NETCDF_PATH>
+  <PNETCDF_PATH></PNETCDF_PATH>
+  <ADD_SLIBS>-L/usr/lib/ -L/usr -lnetcdff -Wl,-Bsymbolic-functions -Wl,-z,relro -lnetcdf -lnetcdf</ADD_SLIBS>  
+  <ADD_FFLAGS>-fno-range-check</ADD_FFLAGS>
+  <CONFIG_ARGS></CONFIG_ARGS>
+  <ESMF_LIBDIR></ESMF_LIBDIR>
+  <MPI_LIB_NAME></MPI_LIB_NAME>
+  <MPI_PATH></MPI_PATH>
+</compiler>
+
 <compiler COMPILER="pathscale">
   <!-- http://www.pathscale.com/node/70 -->
   <ADD_CPPDEFS> -DFORTRANUNDERSCORE -DNO_R16 -DCPRPATHSCALE </ADD_CPPDEFS>
