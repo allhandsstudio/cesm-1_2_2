@@ -8,17 +8,17 @@ source ./Tools/ccsm_getenv || exit -1
 
 set ntasks  = `${CASEROOT}/Tools/taskmaker.pl -sumonly`
 set maxthrds = `${CASEROOT}/Tools/taskmaker.pl -maxthrds`
+@ nodes = $ntasks / ${MAX_TASKS_PER_NODE}
+if ( $ntasks % ${MAX_TASKS_PER_NODE} > 0) then
+  @ nodes = $nodes + 1
+  @ ntasks = $nodes * ${MAX_TASKS_PER_NODE}
+endif
+@ taskpernode = ${MAX_TASKS_PER_NODE} / ${maxthrds}
+set qname = batch
+set tlimit = "00:59:00"
 
-#@ nodes = $ntasks / ${MAX_TASKS_PER_NODE}
-#if ( $ntasks % ${MAX_TASKS_PER_NODE} > 0) then
-#  @ nodes = $nodes + 1
-#  @ ntasks = $nodes * ${MAX_TASKS_PER_NODE}
-#endif
-#@ taskpernode = ${MAX_TASKS_PER_NODE} / ${maxthrds}
-
-set qname = standard
-set tlimit = "02:59:00"
-if ($CCSM_ESTCOST > 2) set tlimit = "05:59:00"
+#--- Job name is first fifteen characters of case name ---
+set jobname = `echo ${CASE} | cut -c1-15`
 
 if ($?TESTMODE) then
  set file = $CASEROOT/${CASE}.test 
@@ -28,12 +28,30 @@ endif
 
 cat >! $file << EOF1
 #!/bin/csh -f
-#PBS -N ${CASE}
-#PBS -q ${qname}
-#PBS -l nodes=${ntasks}
-#PBS -l walltime=${tlimit}
-#PBS -j oe
-#PBS -S /bin/csh -V
+#===============================================================================
+# USERDEFINED
+# This is where the batch submission is set.  The above code computes
+# the total number of tasks, nodes, and other things that can be useful
+# here.  Use PBS, BSUB, or whatever the local environment supports.
+#===============================================================================
+
+##PBS -N ${jobname}
+##PBS -q ${qname}
+##PBS -l nodes=${nodes}:ppn=${taskpernode}
+##PBS -l walltime=${tlimit}
+##PBS -r n
+##PBS -j oe
+##PBS -S /bin/csh -V
+
+##BSUB -l nodes=${nodes}:ppn=${taskpernode}:walltime=${tlimit}
+##BSUB -q ${qname}
+###BSUB -k eo
+###BSUB -J $CASE
+###BSUB -W ${tlimit}
+
+#limit coredumpsize 1000000
+#limit stacksize unlimited
+
 
 EOF1
 
@@ -50,18 +68,28 @@ cd \$RUNDIR
 echo "\`date\` -- CSM EXECUTION BEGINS HERE" 
 
 setenv OMP_NUM_THREADS ${maxthrds}
+
+#===============================================================================
+# USERDEFINED
+# edit job launching
+#===============================================================================
+
 mpiexec --allow-run-as-root -n 32 $EXEROOT/cesm.exe >&! cesm.log.$LID
+#mpiexec -n ${maxtasks} \$EXEROOT/cesm.exe >&! cesm.log.\$LID
+#mpirun -np ${maxtasks} \$EXEROOT/cesm.exe >&! cesm.log.\$LID
 
 wait
 echo "\`date\` -- CSM EXECUTION HAS FINISHED" 
 
 EOF1
 
+
 #################################################################################
 else if ($PHASE == set_larch) then
 #################################################################################
 
    #This is a place holder for a long-term archiving script
+
 
 #################################################################################
 else
@@ -74,3 +102,5 @@ else
 #################################################################################
 endif
 #################################################################################
+
+
