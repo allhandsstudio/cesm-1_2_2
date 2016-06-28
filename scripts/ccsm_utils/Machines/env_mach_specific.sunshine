@@ -14,4 +14,3 @@
 #module load netcdf
 
 #limit coredumpsize unlimited
-ulimit -s unlimited
