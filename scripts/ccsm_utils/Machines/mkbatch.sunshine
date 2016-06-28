@@ -74,7 +74,7 @@ setenv OMP_NUM_THREADS ${maxthrds}
 # edit job launching
 #===============================================================================
 
-mpiexec --allow-run-as-root -n 32 $EXEROOT/cesm.exe >&! cesm.log.$LID
+mpiexec --allow-run-as-root -n 32 \$EXEROOT/cesm.exe >&! cesm.log.\$LID
 #mpiexec -n ${maxtasks} \$EXEROOT/cesm.exe >&! cesm.log.\$LID
 #mpirun -np ${maxtasks} \$EXEROOT/cesm.exe >&! cesm.log.\$LID
 
