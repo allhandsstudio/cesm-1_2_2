@@ -74,6 +74,7 @@ endif
 # Resubmit another run script
 # -------------------------------------------------------------------------
 
+cd $CASEROOT
 if ($RESUBMIT > 0) then
     @ RESUBMIT = $RESUBMIT - 1
     echo RESUBMIT is now $RESUBMIT
@@ -102,6 +103,7 @@ EOF
 endif
 
 if ($CHECK_TIMING == 'TRUE') then
+  cd $CASEROOT
   if !(-d timing) mkdir timing
   $CASETOOLS/getTiming.csh -lid $LID 
   gzip timing/ccsm_timing_stats.$LID
