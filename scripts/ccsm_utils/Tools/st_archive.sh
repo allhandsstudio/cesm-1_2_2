@@ -11,7 +11,7 @@
 #arg2 => destination
 #remaining args => actual files to be processed 
 dispose() {
-    if [ "$1" == "ifiles_y" ] && [ "$DOUT_S_SAVE_INT_REST_FILES" != "TRUE" ]; then
+    if [ "$1" = "ifiles_y" ] && [ "$DOUT_S_SAVE_INT_REST_FILES" != "TRUE" ]; then
 	shift
 	shift
 	rm $*       2> /dev/null
@@ -73,7 +73,7 @@ if [ -z "$DOUT_S_SAVE_INT_REST_FILES" ]; then
     export DOUT_S_SAVE_INT_REST_FILES=FALSE
 fi
 
-if [ "$DOUT_S_SAVE_INT_REST_FILES" == "FALSE" ]; then
+if [ "$DOUT_S_SAVE_INT_REST_FILES" = "FALSE" ]; then
     echo "st_archive.sh: restart files from end of run will be saved, "
     echo "               interim restart files will be deleted"
 fi
