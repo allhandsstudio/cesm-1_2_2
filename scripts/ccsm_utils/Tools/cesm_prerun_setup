@@ -41,3 +41,6 @@ setenv LID "`date +%y%m%d-%H%M%S`"
 set sdate = `date +"%Y-%m-%d %H:%M:%S"`
 echo "run started $sdate" >>& $CASEROOT/CaseStatus
 
+# --- Create entry in the run database ---
+python3 ./create_run_entry.py
+
