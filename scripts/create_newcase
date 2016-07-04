@@ -791,6 +791,8 @@ my @files = (
 	     "$scriptsroot/ccsm_utils/Tools/create_production_test", 
 	     "$scriptsroot/ccsm_utils/Tools/xmlchange",
 	     "$scriptsroot/ccsm_utils/Tools/xmlquery",
+         "$scriptsroot/sunshine_utils/create_run_entry.py",
+         "$scriptsroot/sunshine_utils/process_run.py",
             ); 
 foreach my $file (@files) {
     $sysmod = "cp -p $file $caseroot"; 
