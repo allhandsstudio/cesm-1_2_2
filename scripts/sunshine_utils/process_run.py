@@ -23,33 +23,36 @@ model_data = {
     'rof': {'prefix': 'case1.rtm.h0'}
 }
 
-for model in model_data.keys():
-    dirname = '{}/{}/hist'.format(OUTPUT_DIR, model)
-    prefix = model_data[model]['prefix']
+try:
+    for model in model_data.keys():
+        dirname = '{}/{}/hist'.format(OUTPUT_DIR, model)
+        prefix = model_data[model]['prefix']
 
-    files = [x for x in listdir(dirname) if x.startswith(prefix)]
-    if len(files) == 0:
-        print('no data files found for {}'.format(model))
-        continue
-    example_file = files[0] # assume all data files have the same vars
+        files = [x for x in listdir(dirname) if x.startswith(prefix)]
+        if len(files) == 0:
+            print('no data files found for {}'.format(model))
+            continue
+        example_file = files[0] # assume all data files have the same vars
 
-    subprocess.run('ncks -m {} > var_info'.format(example_file), cwd=dirname, shell=True)
-    varnames = []
-    with open('{}/var_info'.format(dirname)) as fd:
-        lines = fd.readlines()
-        # example line: 
-        for x in lines:
-            if 'sizeof' in x:
-                varnames.append(x.split(' ')[0])
-    for varname in varnames:
-        subprocess.run('ncrcat -v {} {}*.nc ts_{}.nc'.format(varname, prefix, varname),
-            cwd=dirname, shell=True)
-    subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "*"'.format(
-        dirname, s3prefix, model), cwd=dirname, shell=True)
-    try:
-        subprocess.run('rm ts_*', cwd=dirname, shell=True)
-    except:
-        print('no time series to delete')
+        subprocess.run('ncks -m {} > var_info'.format(example_file), cwd=dirname, shell=True)
+        varnames = []
+        with open('{}/var_info'.format(dirname)) as fd:
+            lines = fd.readlines()
+            # example line: 
+            for x in lines:
+                if 'sizeof' in x:
+                    varnames.append(x.split(' ')[0])
+        for varname in varnames:
+            subprocess.run('ncrcat -v {} {}*.nc ts_{}.nc'.format(varname, prefix, varname),
+                cwd=dirname, shell=True)
+        subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "*"'.format(
+            dirname, s3prefix, model), cwd=dirname, shell=True)
+        try:
+            subprocess.run('rm ts_*', cwd=dirname, shell=True)
+        except:
+            print('no time series to delete')
+except:
+    print('error in process_run s3 upload')
 
 # ---------------------------------------------
 # Timing & Logs
