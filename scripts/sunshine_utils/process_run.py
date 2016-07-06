@@ -2,6 +2,7 @@ import subprocess
 import os
 from os import listdir
 import json
+import sys
 
 LID = os.getenv('LID')
 OUTPUT_DIR = '/var/cesm/output'
@@ -27,6 +28,8 @@ for model in model_data.keys():
     prefix = model_data[model]['prefix']
 
     files = [x for x in listdir(dirname) if x.startswith(prefix)]
+    if len(files) == 0:
+        sys.exit(0)
     example_file = files[0] # assume all data files have the same vars
 
     subprocess.run('ncks -m {} > var_info'.format(example_file), cwd=dirname, shell=True)
