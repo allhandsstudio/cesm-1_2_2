@@ -45,7 +45,10 @@ for model in model_data.keys():
             cwd=dirname, shell=True)
     subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "case1*.nc"'.format(
         dirname, s3prefix, model), cwd=dirname, shell=True)
-    subprocess.run('rm ts_*', cwd=dirname, shell=True)
+    try:
+        subprocess.run('rm ts_*', cwd=dirname, shell=True)
+    except:
+        print('no time series to delete')
 
 # ---------------------------------------------
 # Timing & Logs
