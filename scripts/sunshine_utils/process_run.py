@@ -44,7 +44,7 @@ for model in model_data.keys():
     for varname in varnames:
         subprocess.run('ncrcat -v {} {}*.nc ts_{}.nc'.format(varname, prefix, varname),
             cwd=dirname, shell=True)
-    subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "case1*"'.format(
+    subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "*"'.format(
         dirname, s3prefix, model), cwd=dirname, shell=True)
     try:
         subprocess.run('rm ts_*', cwd=dirname, shell=True)
