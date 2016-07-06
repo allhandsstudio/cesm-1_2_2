@@ -29,7 +29,8 @@ for model in model_data.keys():
 
     files = [x for x in listdir(dirname) if x.startswith(prefix)]
     if len(files) == 0:
-        sys.exit(0)
+        print('no data files found for {}'.format(model))
+        continue
     example_file = files[0] # assume all data files have the same vars
 
     subprocess.run('ncks -m {} > var_info'.format(example_file), cwd=dirname, shell=True)
@@ -43,7 +44,7 @@ for model in model_data.keys():
     for varname in varnames:
         subprocess.run('ncrcat -v {} {}*.nc ts_{}.nc'.format(varname, prefix, varname),
             cwd=dirname, shell=True)
-    subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "case1*.nc"'.format(
+    subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "case1*"'.format(
         dirname, s3prefix, model), cwd=dirname, shell=True)
     try:
         subprocess.run('rm ts_*', cwd=dirname, shell=True)
@@ -54,7 +55,10 @@ for model in model_data.keys():
 # Timing & Logs
 # ---------------------------------------------
 
-subprocess.run('aws s3 cp ccsm_timing.case1.{} {}timing/'.format(LID, s3prefix), cwd='/var/cesm/case1/timing', shell=True)
+try:
+    subprocess.run('aws s3 cp ccsm_timing.case1.{} {}timing/'.format(LID, s3prefix), cwd='/var/cesm/case1/timing', shell=True)
+except:
+    print('timing file not found')
 
 # ---------------------------------------------
 # Update dynamo
