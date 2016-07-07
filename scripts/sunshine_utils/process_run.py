@@ -9,7 +9,7 @@ OUTPUT_DIR = '/var/cesm/output'
 
 subprocess.run('wget http://169.254.169.254/latest/meta-data/instance-id -q -O instance-id', shell=True)
 instance_id = open('instance-id').read()
-s3prefix = 's3://cesm-output-data/{}-{}/'.format(instance_id, LID)
+s3prefix = 's3://cesm-output-data/{}/'.format(instance_id)
 
 # ---------------------------------------------
 # Process data into time series and send to S3
@@ -24,6 +24,7 @@ model_data = {
 }
 
 try:
+    subprocess.run('aws s3 cp {}output/ {}output.prev --recursive'.format(s3prefix, s3prefix), shell=True)
     for model in model_data.keys():
         dirname = '{}/{}/hist'.format(OUTPUT_DIR, model)
         prefix = model_data[model]['prefix']
@@ -76,7 +77,7 @@ aws dynamodb put-item \
 item = {
     "InstanceId": { "S": instance_id },
     "CreatedTime": { "S": LID },
-    "S3Prefix": { "S": "s3://cesm-output-data/{}-{}".format(instance_id, LID) }
+    "S3Prefix": { "S": "s3://cesm-output-data/{}".format(instance_id) }
 }
 with open('run_item.json', 'w') as fd:
     fd.write(json.dumps(item))
