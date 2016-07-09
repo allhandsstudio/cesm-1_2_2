@@ -69,7 +69,7 @@
     <BATCHSUBMIT>bsub</BATCHSUBMIT>
     <BATCHQUERY>bjobs -w</BATCHQUERY>
     <GMAKE_J>8</GMAKE_J>
-    <MAX_TASKS_PER_NODE>36</MAX_TASKS_PER_NODE>
+    <MAX_TASKS_PER_NODE>32</MAX_TASKS_PER_NODE>
 </machine>
 <machine MACH="bluewaters">
          <DESC>ORNL XE6, os is CNL, 32 pes/node, batch system is PBS</DESC>
