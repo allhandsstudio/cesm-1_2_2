@@ -16,11 +16,11 @@ s3prefix = 's3://cesm-output-data/{}/'.format(instance_id)
 # ---------------------------------------------
 
 model_data = {
-    'ocn': {'prefix': 'case1.pop.h'},
-    'atm': {'prefix': 'case1.cam.h0'},
-    'lnd': {'prefix': 'case1.clm2.h0'},
-    'ice': {'prefix': 'case1.cice.h'},
-    'rof': {'prefix': 'case1.rtm.h0'}
+    'ocn': {'prefix': 'case1.pop.h.'},
+    'atm': {'prefix': 'case1.cam.h0.'},
+    'lnd': {'prefix': 'case1.clm2.h0.'},
+    'ice': {'prefix': 'case1.cice.h.'},
+    'rof': {'prefix': 'case1.rtm.h0.'}
 }
 
 try:
@@ -44,7 +44,7 @@ try:
                 if 'sizeof' in x:
                     varnames.append(x.split(' ')[0])
         for varname in varnames:
-            subprocess.run('ncrcat -v {} {}*.nc ts_{}.nc'.format(varname, prefix, varname),
+            subprocess.run('ncrcat -v {} {}????-??.nc ts_{}.nc'.format(varname, prefix, varname),
                 cwd=dirname, shell=True)
         subprocess.run('aws s3 cp {} {}output/{}/ --recursive --include "ts_*.nc" --exclude "case1*"'.format(
             dirname, s3prefix, model), cwd=dirname, shell=True)
